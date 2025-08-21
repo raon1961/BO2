@@ -34,10 +34,12 @@ function MemberCard({ member, onClick }) {
     "div",
     {
       ref: ref,
-      className: `bg-white rounded-lg shadow-md p-4 sm:p-6 text-center cursor-pointer transform transition duration-700 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`,
+      className: `bg-white rounded-lg shadow-md p-4 sm:p-6 text-center cursor-pointer transform transition duration-700 hover:scale-105 hover:shadow-xl ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`,
       onClick: () => onClick(member)
     },
-    React.createElement("img", { src: member.img, alt: member.name, className: "w-40 h-32 mx-auto rounded-lg object-cover" }),
+    React.createElement("div", { className: "relative w-full", style: { aspectRatio: "5/4" } },
+      React.createElement("img", { src: member.img, alt: member.name, className: "w-full h-full rounded-lg object-cover" })
+    ),
     React.createElement("h2", {
       className: "text-lg sm:text-xl font-semibold mt-2",
       style: { fontFamily: "Sequel100Black, sans-serif" }
@@ -49,18 +51,20 @@ function MemberCard({ member, onClick }) {
 function SocialSection() {
   const [ref, visible] = useScrollAnimation();
 
+  const icons = [
+    { href: "https://youtube.com/@boysplanet.official?si=uWoML6FSkZG1qDg1", src: "images/youtube.png", alt: "YouTube" },
+    { href: "https://www.instagram.com/boysplanet.official?igsh=MXJpYzVjeGljdzVyeg==", src: "images/instagram.png", alt: "Instagram" },
+    { href: "https://x.com/_mnetboysplanet?s=21", src: "images/x.png", alt: "X" }
+  ];
+
   return React.createElement(
     "div",
     { ref: ref, className: `mt-12 flex justify-center space-x-6 opacity-0 transform translate-y-10 transition duration-700 ${visible ? "opacity-100 translate-y-0" : ""}` },
-    React.createElement("a", { href: "https://youtube.com/@boysplanet.official?si=uWoML6FSkZG1qDg1", target: "_blank", rel: "noopener noreferrer" },
-      React.createElement("img", { src: "images/youtube.png", alt: "YouTube", className: "w-8 h-8 sm:w-10 sm:h-10 hover:scale-125 transition transform duration-300" })
-    ),
-    React.createElement("a", { href: "https://www.instagram.com/boysplanet.official?igsh=MXJpYzVjeGljdzVyeg==", target: "_blank", rel: "noopener noreferrer" },
-      React.createElement("img", { src: "images/instagram.png", alt: "Instagram", className: "w-8 h-8 sm:w-10 sm:h-10 hover:scale-125 transition transform duration-300" })
-    ),
-    React.createElement("a", { href: "https://x.com/_mnetboysplanet?s=21", target: "_blank", rel: "noopener noreferrer" },
-      React.createElement("img", { src: "images/x.png", alt: "X", className: "w-8 h-8 sm:w-10 sm:h-10 hover:scale-125 transition transform duration-300" })
-    )
+    icons.map((icon, idx) => React.createElement(
+      "a",
+      { key: idx, href: icon.href, target: "_blank", rel: "noopener noreferrer" },
+      React.createElement("img", { src: icon.src, alt: icon.alt, className: "w-8 h-8 sm:w-10 sm:h-10 hover:scale-125 transition-transform duration-300" })
+    ))
   );
 }
 
@@ -84,11 +88,14 @@ function App() {
       onClick: handleCloseModal
     },
       React.createElement("div", {
-        className: "bg-white p-6 rounded-lg w-11/12 max-w-md relative",
+        className: `bg-white p-6 rounded-lg w-11/12 max-w-md relative transform transition-all duration-500
+                    opacity-100 scale-100`,
         onClick: e => e.stopPropagation()
       },
         React.createElement("button", { className: "absolute top-2 right-2 text-gray-500", onClick: handleCloseModal }, "X"),
-        React.createElement("img", { src: selectedMember.img, alt: selectedMember.name, className: "w-56 h-44 mx-auto rounded-lg object-cover" }),
+        React.createElement("div", { className: "relative w-full", style: { aspectRatio: "5/4" } },
+          React.createElement("img", { src: selectedMember.img, alt: selectedMember.name, className: "w-full h-full rounded-lg object-cover" })
+        ),
         React.createElement("h2", {
           className: "text-2xl sm:text-3xl font-bold mt-4 text-center",
           style: { fontFamily: "Sequel100Black, sans-serif" }
