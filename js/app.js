@@ -71,7 +71,13 @@ function SocialSection() {
 // 메인 앱
 function App() {
   const [selectedMember, setSelectedMember] = React.useState(null);
-  const handleCloseModal = () => setSelectedMember(null);
+  const [showModal, setShowModal] = React.useState(false);
+
+  const handleOpenModal = (member) => {
+    setSelectedMember(member);
+    setShowModal(true);
+  };
+  const handleCloseModal = () => setShowModal(false);
 
   return React.createElement(
     "div",
@@ -79,28 +85,33 @@ function App() {
     React.createElement(
       "div",
       { className: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6" },
-      members.map(member => React.createElement(MemberCard, { key: member.id, member: member, onClick: setSelectedMember }))
+      members.map(member => React.createElement(MemberCard, { key: member.id, member: member, onClick: handleOpenModal }))
     ),
     React.createElement(SocialSection),
-    selectedMember &&
-    React.createElement("div", {
-      className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50",
-      onClick: handleCloseModal
-    },
-      React.createElement("div", {
-        className: `bg-white p-6 rounded-lg w-11/12 max-w-md relative transform transition-all duration-500
-                    opacity-100 scale-100`,
-        onClick: e => e.stopPropagation()
+    React.createElement(
+      "div",
+      {
+        className: `fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-1000 ${showModal ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`,
+        onClick: handleCloseModal
       },
-        React.createElement("button", { className: "absolute top-2 right-2 text-gray-500", onClick: handleCloseModal }, "X"),
-        React.createElement("div", { className: "relative w-full", style: { aspectRatio: "5/4" } },
-          React.createElement("img", { src: selectedMember.img, alt: selectedMember.name, className: "w-full h-full rounded-lg object-cover" })
-        ),
-        React.createElement("h2", {
-          className: "text-2xl sm:text-3xl font-bold mt-4 text-center",
-          style: { fontFamily: "Sequel100Black, sans-serif" }
-        }, selectedMember.name),
-        React.createElement("p", { className: "mt-2 text-gray-600 text-center text-sm sm:text-base" }, selectedMember.bio)
+      React.createElement(
+        "div",
+        {
+          className: `bg-white p-6 rounded-lg w-11/12 max-w-md relative transform transition-all duration-1000 ease-out
+                      ${showModal ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 -translate-y-5"}`,
+          onClick: e => e.stopPropagation()
+        },
+        selectedMember && React.createElement(React.Fragment, null,
+          React.createElement("button", { className: "absolute top-2 right-2 text-gray-500", onClick: handleCloseModal }, "X"),
+          React.createElement("div", { className: "relative w-full", style: { aspectRatio: "5/4" } },
+            React.createElement("img", { src: selectedMember.img, alt: selectedMember.name, className: "w-full h-full rounded-lg object-cover" })
+          ),
+          React.createElement("h2", {
+            className: "text-2xl sm:text-3xl font-bold mt-4 text-center",
+            style: { fontFamily: "Sequel100Black, sans-serif" }
+          }, selectedMember.name),
+          React.createElement("p", { className: "mt-2 text-gray-600 text-center text-sm sm:text-base" }, selectedMember.bio)
+        )
       )
     )
   );
